@@ -1,4 +1,25 @@
 # vue-cli-demo
+npm config set registry https://registry.npm.taobao.org
+npm config get registry
+npm config get prefix
+
+npm install -g @vue/cli
+npm install -g @vue/cli-service-global
+vue serve
+vue build
+
+vue ui
+
+vue create hello-world
+
+vscode
+  ctrl + -
+  View In Browser
+  Copy Relative Path
+  eslint
+    - js配置
+  Local History
+  Vetur
 
 ## Project setup
 ```

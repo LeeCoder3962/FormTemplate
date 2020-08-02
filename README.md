@@ -4,6 +4,7 @@ npm config get registry
 npm config get prefix
 
 npm install -g @vue/cli
+  vue-cli-plugin-eslint
 npm install -g @vue/cli-service-global
 vue serve
 vue build
@@ -12,12 +13,23 @@ vue ui
 
 vue create hello-world
 
+ vue add element
+  node-sass安装失败 升级为dart sass
+  npm uninstall node-sass
+  npm install sass -S -D
+
 vscode
+  - 如何快速生成.vue文件
+  - 如何准备快捷生成代码
+  - 快捷键
+    - 
+  AutoSave
   ctrl + -
   View In Browser
   Copy Relative Path
   eslint
     - js配置
+    - vscode setting配置
   Local History
   Vetur
 

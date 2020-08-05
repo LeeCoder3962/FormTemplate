@@ -14,6 +14,7 @@ vue ui
 vue create hello-world
 
  vue add element
+ npm install
   node-sass安装失败 升级为dart sass
   npm uninstall node-sass
   npm install sass -S -D

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  };
+</style>
+<body>
+  <div id="app">
+    <el-form :model="form">
+    <table>
+      <tbody>
+        <tr>
+          <td rowspan="2">名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+        </tr>
+        <tr>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td colspan="3"><el-input v-model="form.name" /></td>
+        </tr>
+        <tr>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+          <td>名称</td>
+          <td><el-input v-model="form.name" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </el-form>
+  </div>
+</body>
+  <!-- import Vue before Element -->
+  <!-- <script src="https://unpkg.com/vue/dist/vue.js"></script> -->
+  <script src="vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="index.js"></script>
+  <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+          form: {
+            name: 111
+          }
+        }
+      },
+    methods: {
+    }
+    })
+  </script>
+</html>

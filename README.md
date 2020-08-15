@@ -56,3 +56,13 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# js异步处理
+# axios
+- 在node_modules中的axios目录下的dist正是可以直接引用的js
+    - .map是
+- promise then catch
+- 异步请求 没有同步
+
+- async await

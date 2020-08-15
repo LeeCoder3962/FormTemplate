@@ -4,6 +4,11 @@ import './plugins/element.js'
 
 Vue.config.productionTip = false
 
+// new Vue({
+//   el: '#app',
+//   render: h => h(App)
+// })
+
 new Vue({
   render: h => h(App)
 }).$mount('#app')

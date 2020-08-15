@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <FormTemplate />
+    <!-- <FormTemplate /> -->
+    <elupload />
   </div>
 </template>
 
 <script>
-import FormTemplate from './components/FormTemplate.vue'
+// import FormTemplate from './components/FormTemplate.vue'
+import elupload from './components/elupload.vue'
+// import elupload from './components/elupload_async.vue'
 
 export default {
   name: 'App',
   components: {
-    FormTemplate
+    // FormTemplate,
+    elupload
   }
 }
 </script>

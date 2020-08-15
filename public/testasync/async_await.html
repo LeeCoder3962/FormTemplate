@@ -1,0 +1,28 @@
+<script>
+//    var asyncFun =  function (resolve, reject) {
+//         console.log(1);
+//         setTimeout(function () {resolve(2)}, 2000);
+//         console.log(3);
+//     }
+
+//     new Promise(asyncFun).then(function (data) {
+//         console.log(data);
+//     });
+
+    
+    var asyncFun =  function (resolve, reject) {
+        setTimeout(function () {resolve(2)}, 2000);
+    }
+    var p = new Promise(asyncFun).then(function (data) {
+        console.log(data);
+    });
+
+    async function a() {
+        console.log(1);
+        await p;
+        console.log(3);
+    }
+    
+    a();
+
+</script>

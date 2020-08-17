@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import './plugins/element.js'
 import FormTemplate from './components/FormTemplate.vue'
 
 export default {

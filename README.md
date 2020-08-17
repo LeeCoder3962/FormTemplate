@@ -70,3 +70,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # mock 模拟数据
 - npm install mockjs
+
+# 打包
+vue-cli-service build --target lib --name myLib

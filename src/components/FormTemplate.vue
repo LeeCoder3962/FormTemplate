@@ -22,38 +22,45 @@
             :key="formField.fieldId"
             :label="formField.fieldSeq + '. ' + formField.fieldName"
           >
-            <div v-if="formField.fieldType === FieldTypeEnum.INPUT">
-              <el-input v-model="formField.fieldAnswer.answer" />
-            </div>
-            <div v-if="formField.fieldType === FieldTypeEnum.TEXTAREA">
-              <el-input v-model="formField.fieldAnswer.answer" type="textarea" />
-            </div>
-            <div v-if="formField.fieldType === FieldTypeEnum.RADIO">
-              <el-radio-group
+            <form-field-editor :form-field="formField" :field-type-list="FieldTypeList" />
+
+            <el-input
+              v-if="formField.fieldType === FieldTypeEnum.INPUT"
+              v-model="formField.fieldAnswer.answer"
+            />
+            <el-input
+              v-if="formField.fieldType === FieldTypeEnum.TEXTAREA"
+              v-model="formField.fieldAnswer.answer"
+              type="textarea"
+            />
+            <el-radio-group
+              v-if="formField.fieldType === FieldTypeEnum.RADIO"
+              v-model="formField.fieldAnswer.answer"
+            >
+              <el-radio
                 v-for="fieldOption in formField.fieldOptionList"
                 :key="fieldOption.optionId"
-                v-model="formField.fieldAnswer.answer"
+                :label="fieldOption.optionId"
               >
-                <el-radio :label="fieldOption.optionId">
-                  {{ fieldOption.optionName }}
-                </el-radio>
-              </el-radio-group>
-            </div>
-            <div v-if="formField.fieldType === FieldTypeEnum.CHECKBOX">
-              <el-checkbox-group
+                {{ fieldOption.optionName }}
+              </el-radio>
+            </el-radio-group>
+            <el-checkbox-group
+              v-if="formField.fieldType === FieldTypeEnum.CHECKBOX"
+              v-model="formField.fieldAnswer.answer"
+            >
+              <el-checkbox
                 v-for="fieldOption in formField.fieldOptionList"
                 :key="fieldOption.optionId"
-                v-model="formField.fieldAnswer.answer"
+                :label="fieldOption.optionId"
               >
-                <el-checkbox :label="fieldOption.optionId">
-                  {{ fieldOption.optionName }}
-                </el-checkbox>
-              </el-checkbox-group>
-            </div>
+                {{ fieldOption.optionName }}
+              </el-checkbox>
+            </el-checkbox-group>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">保存</el-button>
-            <el-button @click="onReset">重置</el-button>
+            <el-button type="primary" @click="onAddField">新增字段</el-button>
+            <el-button @click="onOut">退出</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -68,9 +75,32 @@ const FieldTypeEnum = {
   RADIO: 'radio',
   CHECKBOX: 'checkbox'
 }
+const FieldTypeList = [
+  {
+    label: '单行文本题',
+    value: 'input'
+  },
+  {
+    label: '多行文本题',
+    value: 'textarea'
+  },
+  {
+    label: '单选题',
+    value: 'radio'
+  },
+  {
+    label: '多选题',
+    value: 'checkbox'
+  }
+]
 Object.freeze(FieldTypeEnum)
 
+import FormFieldEditor from './FormFieldEditor.vue'
+
 export default {
+  components: {
+    FormFieldEditor
+  },
   data() {
     return {
       formTmpl: {
@@ -210,15 +240,14 @@ export default {
         ]
       },
       labelPosition: 'top',
-      FieldTypeEnum: FieldTypeEnum
+      FieldTypeEnum: FieldTypeEnum,
+      FieldTypeList: FieldTypeList
     }
   },
   methods: {
-    onSubmit: function() {
-      console.log(this)
+    onAddField: function() {
     },
-    onReset: function() {
-      this.$refs['formTmpl'].resetFields()
+    onOut: function() {
     }
   }
 }

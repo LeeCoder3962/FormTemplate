@@ -17,13 +17,14 @@
     <el-row>
       <el-col :span="12" :offset="6">
         <el-form ref="formTmpl" :label-position="labelPosition">
-          <draggable v-model="formFieldList" :animation="200" :scroll="true" filter=".noDraggable" :move="draggableMove">
+          <draggable v-model="formFieldList" :animation="200" :scroll="true" :move="draggableMove" draggable=".draggabled">
             <transition-group name="field-transition">
               <div
                 v-for="formField in formFieldList"
                 :key="formField.fieldId"
+                :class="{draggabled:ifEditable&&!formField.ifShowEditor}"
               >
-                <el-card v-if="ifEditable&&formField.ifShowEditor" shadow="always" class="noDraggable animateEditor">
+                <el-card v-if="ifEditable&&formField.ifShowEditor" shadow="always" class="animateEditor">
                   <el-row>
                     <el-col :span="18" :offset="3">
                       <div>
@@ -32,12 +33,17 @@
                     </el-col>
                   </el-row>
                 </el-card>
-                <el-card v-else :shadow="cardShadow()">
+                <el-card v-else :shadow="cardShadow()" class="form-field-card">
                   <el-row>
                     <el-col :span="18" :offset="3">
                       <div @click="showEditor(formField)">
                         <form-field v-bind="formField" />
                       </div>
+                    </el-col>
+                    <el-col :span="1" :offset="2">
+                      <i class="my-el-icon el-icon-edit-outline" />
+                      <i class="my-el-icon el-icon-delete" />
+                      <i class="my-el-icon el-icon-copy-document" />
                     </el-col>
                   </el-row>
                 </el-card>
@@ -62,6 +68,7 @@ import FormField from './FormField.vue'
 import { FieldTypeEnum } from './enum.js'
 import draggable from 'vuedraggable'
 import { v4 as uuidv4 } from 'uuid'
+import deepClone from '../utils/deepClone.js'
 
 export default {
   name: 'FormTemplate',
@@ -115,13 +122,15 @@ export default {
       type: String,
       default: null
     },
-    formFieldList: {
+    initFormFieldList: {
       type: Array,
       required: true
     }
   },
   data() {
     return {
+      formFieldList: deepClone(this.initFormFieldList),
+      FieldTypeEnum: FieldTypeEnum,
       labelPosition: 'top',
       ifEditable: true,
       cardShadow() {
@@ -131,7 +140,7 @@ export default {
           return 'never'
         }
       },
-      FieldTypeEnum: FieldTypeEnum
+      ifShowIcon: false
     }
   },
   computed: {
@@ -149,28 +158,33 @@ export default {
   },
   methods: {
     addField() {
-      this.formFieldList.push({
-        formId: this.formId,
-        formVer: this.formVer,
-        fieldId: uuidv4().replace(/-/g, ''),
-        fieldSts: 'normal',
-        fieldSeq: this.formFieldList.length + 1,
-        fieldName: '字段名称',
-        fieldType: FieldTypeEnum.INPUT,
-        // fieldDscr: null,
-        // fieldConfig: null,
-        ifRequired: false,
-        // fieldOptionList: [],
-        fieldAnswer: null
-        // fieldAnswer: {
-        //   answerId: 'id1',
-        //   formId: 'id1',
-        //   formVer: 1,
-        //   fieldId: 'id1',
-        //   caseNo: '001',
-        //   answer: '字段答案'
+      if (this.isEditing) {
+        animateCSS('.animateEditor', 'shakeX')
+      } else {
+        this.formFieldList.push({
+          formId: this.formId,
+          formVer: this.formVer,
+          fieldId: uuidv4().replace(/-/g, ''),
+          fieldSts: 'normal',
+          fieldSeq: this.formFieldList.length + 1,
+          fieldName: '字段名称',
+          fieldType: FieldTypeEnum.INPUT,
+          // fieldDscr: null,
+          // fieldConfig: null,
+          ifRequired: false,
+          // fieldOptionList: [],
+          // fieldAnswer: null
+          // fieldAnswer: {
+          //   answerId: 'id1',
+          //   formId: 'id1',
+          //   formVer: 1,
+          //   fieldId: 'id1',
+          //   caseNo: '001',
+          //   answer: '字段答案'
+          ifShowEditor: true
         // }
-      })
+        })
+      }
     },
     editField(formFieldEdited) {
       const formFieldList = this.formFieldList
@@ -236,5 +250,10 @@ text-align: center;
 .field-transition-enter, .field-transition-leave-to {
   opacity: 0;
   transform: translateY(30px);
+}
+.my-el-icon {
+  cursor: pointer;
+  float: right;
+  font-size:x-large;
 }
 </style>

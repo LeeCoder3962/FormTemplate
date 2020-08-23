@@ -28,7 +28,7 @@ export default {
         formConfig: '表单配置',
         createTime: '创建时间',
         createUserId: '创建者',
-        formFieldList: [
+        initFormFieldList: [
           {
             formId: 'id1',
             formVer: 1,

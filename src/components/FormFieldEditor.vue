@@ -13,10 +13,10 @@
         <el-col :span="6" :offset="2">
           <el-select v-model="thisFormField.fieldType" size="mini">
             <el-option
-              v-for="fieldType in fieldTypeList"
-              :key="fieldType.value"
-              :label="fieldType.label"
-              :value="fieldType.value"
+              v-for="fieldTypeItem in fieldTypeList"
+              :key="fieldTypeItem.value"
+              :label="fieldTypeItem.label"
+              :value="fieldTypeItem.value"
             />
           </el-select>
         </el-col>
@@ -92,9 +92,49 @@ export default {
     draggable
   },
   props: {
-    formField: {
-      type: Object,
+    formId: {
+      type: String,
       required: true
+    },
+    formVer: {
+      type: Number,
+      required: true
+    },
+    fieldId: {
+      type: String,
+      required: true
+    },
+    fieldSts: {
+      type: String,
+      required: true
+    },
+    fieldSeq: {
+      type: Number,
+      required: true
+    },
+    fieldName: {
+      type: String,
+      required: true
+    },
+    fieldType: {
+      type: String,
+      required: true
+    },
+    fieldDscr: {
+      type: String,
+      default: null
+    },
+    fieldConfig: {
+      type: String,
+      default: null
+    },
+    ifRequired: {
+      type: Boolean,
+      default: false
+    },
+    fieldOptionList: {
+      type: Array,
+      default: function() { return [] }
     },
     fieldTypeList: {
       type: Array,
@@ -105,7 +145,7 @@ export default {
     return {
       ifShowSetting: false,
       FieldTypeEnum: FieldTypeEnum,
-      thisFormField: deepClone(this.formField)
+      thisFormField: deepClone(this.$props)
     }
   },
   methods: {

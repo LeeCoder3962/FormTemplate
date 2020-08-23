@@ -73,3 +73,46 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 # 打包
 vue-cli-service build --target lib --name myLib
+
+# 自动写入package.json
+- npm --save-dev --save
+
+# 动画
+- npm install animate.css
+  - import 'animate.css'
+  - 封装添加动画函数
+    -  import { animateCSS } from '../plugins/animatecss' 
+      - exports 如果没有default 则要{}
+
+```html
+<transition 
+  enter-active-class="animated tada"
+  leave-active-class="animated hinge">
+  <h1 v-show="isShow"> much？</h1>
+</transition>
+```
+
+# 数组操作
+- find
+- findIndex
+- filter
+- map
+- reduce
+- slice
+
+- vue监听的方法
+push()
+pop()
+shift()
+unshift()
+splice()
+sort()
+reverse()
+
+-  props 传到data 仍然是引用
+  - 采用deepClone
+
+
+# npm install uuid
+
+# npm install vuedraggable

@@ -22,3 +22,30 @@ export const FieldTypeEnum = new Enum([
     key: 'CHECKBOX'
   }
 ])
+
+export const FieldStsEnum = new Enum([
+  {
+    value: 'normal',
+    key: 'NORMAL'
+  },
+  {
+    value: 'temp',
+    key: 'TEMP'
+  },
+  {
+    value: 'updating',
+    key: 'UPDATING'
+  },
+  {
+    value: 'updated',
+    key: 'UPDATED'
+  },
+  {
+    value: 'increased',
+    key: 'INCREASED'
+  },
+  {
+    value: 'deleted',
+    key: 'DELETED'
+  }
+])

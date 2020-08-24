@@ -24,29 +24,32 @@
                 :key="formField.fieldId"
                 :class="{draggabled:ifEditable&&!formField.ifShowEditor}"
               >
-                <el-card v-if="ifEditable&&formField.ifShowEditor" shadow="always" class="animateEditor">
-                  <el-row>
-                    <el-col :span="18" :offset="3">
-                      <div>
-                        <form-field-editor v-bind="formField" :field-type-list="FieldTypeEnum.getArray()" @edit-field="editField" @cancel-edit="cancelEdit" />
-                      </div>
-                    </el-col>
-                  </el-row>
-                </el-card>
-                <el-card v-else :shadow="cardShadow()" class="form-field-card">
-                  <el-row>
-                    <el-col :span="18" :offset="3">
-                      <div @click="showEditor(formField)">
-                        <form-field v-bind="formField" />
-                      </div>
-                    </el-col>
-                    <el-col :span="1" :offset="2">
-                      <i class="my-el-icon el-icon-edit-outline" />
-                      <i class="my-el-icon el-icon-delete" />
-                      <i class="my-el-icon el-icon-copy-document" />
-                    </el-col>
-                  </el-row>
-                </el-card>
+                <div v-if="formField.fieldSts !== FieldStsEnum.DELETED">
+                  <el-card v-if="ifEditable&&formField.ifShowEditor" shadow="always" class="animateEditor">
+                    <el-row>
+                      <el-col :span="18" :offset="3">
+                        <div>
+                          <form-field-editor v-bind="formField" :field-type-list="FieldTypeEnum.getArray()" @edit-field="editField" @cancel-edit="cancelEdit" />
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-card>
+                  <el-card v-else :shadow="cardShadow()" class="form-field-card">
+                    <el-row>
+                      <el-col :span="18" :offset="3">
+                        <div @click="showEditor(formField)">
+                          {{ formField.fieldSts }}
+                          <form-field v-bind="formField" />
+                        </div>
+                      </el-col>
+                      <el-col :span="1" :offset="2">
+                        <i class="my-el-icon el-icon-edit-outline" @click="showEditor(formField)" />
+                        <i class="my-el-icon el-icon-delete" @click="deleteField(formField)" />
+                        <i class="my-el-icon el-icon-copy-document" @click="copyField(formField)" />
+                      </el-col>
+                    </el-row>
+                  </el-card>
+                </div>
               </div>
             </transition-group>
           </draggable>
@@ -65,7 +68,7 @@ import 'animate.css'
 import animateCSS from '../utils/animatecss'
 import FormFieldEditor from './FormFieldEditor.vue'
 import FormField from './FormField.vue'
-import { FieldTypeEnum } from './enum.js'
+import { FieldTypeEnum, FieldStsEnum } from './enum.js'
 import draggable from 'vuedraggable'
 import { v4 as uuidv4 } from 'uuid'
 import deepClone from '../utils/deepClone.js'
@@ -131,6 +134,7 @@ export default {
     return {
       formFieldList: deepClone(this.initFormFieldList),
       FieldTypeEnum: FieldTypeEnum,
+      FieldStsEnum: FieldStsEnum,
       labelPosition: 'top',
       ifEditable: true,
       cardShadow() {
@@ -157,7 +161,9 @@ export default {
     }
   },
   methods: {
+    // todo 重新排序
     addField() {
+      // todo 向上移动
       if (this.isEditing) {
         animateCSS('.animateEditor', 'shakeX')
       } else {
@@ -165,7 +171,7 @@ export default {
           formId: this.formId,
           formVer: this.formVer,
           fieldId: uuidv4().replace(/-/g, ''),
-          fieldSts: 'normal',
+          fieldSts: FieldStsEnum.TEMP,
           fieldSeq: this.formFieldList.length + 1,
           fieldName: '字段名称',
           fieldType: FieldTypeEnum.INPUT,
@@ -188,17 +194,46 @@ export default {
     },
     editField(formFieldEdited) {
       const formFieldList = this.formFieldList
-      // 数组中对象被修改了 还能用数组的indexOf判断位置吗?
       const index = formFieldList.findIndex(formField => formField.fieldId === formFieldEdited.fieldId)
       formFieldEdited.ifShowEditor = false
+      if (formFieldEdited.fieldSts === FieldStsEnum.TEMP) {
+        formFieldEdited.fieldSts = FieldStsEnum.INCREASED
+      } else if (formFieldEdited.fieldSts === FieldStsEnum.UPDATING) {
+        // todo 判断是否真的修改了
+        formFieldEdited.fieldSts = FieldStsEnum.UPDATED
+      }
       formFieldList.splice(index, 1, formFieldEdited)
+    },
+    // todo 撤销删除
+    deleteField(formField) {
+      const that = this
+      // todo bug 删除弹窗没有内容
+      that.$confirm(`确定删除 ${formField.fieldName}？`).then(function() {
+        const formFieldList = that.formFieldList
+        const index = formFieldList.indexOf(formField)
+        formField.fieldSts = FieldStsEnum.DELETED
+        formFieldList.splice(index, 1, formField)
+        that.formFieldList = formFieldList
+      })
+    },
+    copyField(formField) {
+      const formFieldClone = deepClone(formField)
+      formFieldClone.fieldId = uuidv4().replace(/-/g, '')
+      formFieldClone.fieldSeq = this.formFieldList.length + 1
+      formFieldClone.fieldSts = FieldStsEnum.INCREASED
+      // this.formFieldList.push(formFieldClone)
+      this.formFieldList.splice(this.formFieldList.indexOf(formField) + 1, 0, formFieldClone)
     },
     cancelEdit(fieldId) {
       const formFieldList = this.formFieldList
       const index = formFieldList.findIndex(formField => formField.fieldId === fieldId)
       const formField = formFieldList[index]
       formField.ifShowEditor = false
-      formFieldList.splice(index, 1, formField)
+      if (formField.fieldSts === FieldStsEnum.TEMP) {
+        formFieldList.splice(index, 1)
+      } else {
+        formFieldList.splice(index, 1, formField)
+      }
     },
     out() {
     },

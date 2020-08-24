@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { FieldTypeEnum } from './enum.js'
+import { FieldTypeEnum, FieldStsEnum } from './enum.js'
 import deepClone from '../utils/deepClone.js'
 import { v4 as uuidv4 } from 'uuid'
 import draggable from 'vuedraggable'
@@ -146,6 +146,19 @@ export default {
       ifShowSetting: false,
       FieldTypeEnum: FieldTypeEnum,
       thisFormField: deepClone(this.$props)
+    }
+  },
+  watch: {
+    thisFormField: {
+      handler() {
+        // this.thisFormField.fieldSts = FieldStsEnum.UPDATING
+        let fieldSts = this.thisFormField.fieldSts
+        if (fieldSts === FieldStsEnum.NORMAL) {
+          fieldSts = FieldStsEnum.UPDATING
+          this.thisFormField.fieldSts = fieldSts
+        }
+      },
+      deep: true
     }
   },
   methods: {

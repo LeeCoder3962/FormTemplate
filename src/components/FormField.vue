@@ -30,6 +30,7 @@
       v-if="fieldType === FieldTypeEnum.CHECKBOX"
       v-model="fieldAnswer.answer"
     >
+      <!-- 主要checkbox的v-model指不能为null -->
       <el-checkbox
         v-for="fieldOption in fieldOptionList"
         :key="fieldOption.optionId"
@@ -95,13 +96,17 @@ export default {
     fieldAnswer: {
       type: Object,
       default: function() {
+        let answer = null
+        if (this.fieldType === FieldTypeEnum.CHECKBOX) {
+          answer = []
+        }
         return {
           answerId: null,
           formId: null,
           formVer: 1,
           fieldId: null,
           caseNo: null,
-          answer: null
+          answer: answer
 
         }
       }
